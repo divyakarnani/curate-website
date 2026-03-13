@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Curate — Coming Soon</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #ffffff;
+      color: #1A1A1A;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Wordmark */
+    .wordmark {
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards;
+      animation-delay: 0.05s;
+    }
+
+    .wordmark img {
+      height: 180px;
+      width: auto;
+      display: block;
+      transform: translate(-24px, 80px);    
+    }
+
+    /* Subheading */
+    .subheading {
+      font-size: 17px;
+      font-weight: 400;
+      color: #1A1A1A;
+      line-height: 1.6;
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards;
+      animation-delay: 0.2s;
+    }
+
+    /* Form */
+    .form-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards;
+      animation-delay: 0.35s;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    input[type="email"] {
+      width: 100%;
+      padding: 16px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 400;
+      color: #1A1A1A;
+      background: #fff;
+      border: 1px solid #EDEAF1;
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    input[type="email"]::placeholder {
+      color: #C4A8D4;
+    }
+
+    input[type="email"]:focus {
+      border-color: #9B7BB0;
+    }
+
+    input[type="email"].error {
+      border-color: #D96060;
+    }
+
+    .error-text {
+      font-size: 13px;
+      font-weight: 400;
+      color: #D96060;
+      display: none;
+    }
+
+    .error-text.visible {
+      display: block;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 16px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      background: #9B7BB0;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    button[type="submit"]:hover {
+      background: #7A5A90;
+    }
+
+    button[type="submit"]:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Success state */
+    .success-state {
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeUp 0.4s ease forwards;
+    }
+
+    .success-state.visible {
+      display: flex;
+    }
+
+    .success-icon {
+      color: #5BB88A;
+    }
+
+    .success-text {
+      font-size: 17px;
+      font-weight: 600;
+      color: #1A1A1A;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 390px) {
+      .subheading {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="wordmark">
+      <img src="logo.png" alt="curate" />
+    </div>
+
+    <p class="subheading">
+      The "Beli meets Kayak" for beauty. Objective scores, AI personalization, trusted friend ratings, and price comparison — all in one place.
+    </p>
+
+    <div class="form-wrapper">
+      <form class="input-group" id="waitlist-form" novalidate>
+        <input
+          type="email"
+          id="email-input"
+          placeholder="your@email.com"
+          autocomplete="email"
+          inputmode="email"
+        />
+        <span class="error-text" id="error-text">Please enter a valid email.</span>
+        <button type="submit" id="submit-btn">Join the waitlist</button>
+      </form>
+
+      <div class="success-state" id="success-state">
+        <svg class="success-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="#5BB88A" stroke-width="1.5"/>
+          <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#5BB88A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="success-text">You're on the list.</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // replace with your project values
+    const SUPABASE_URL = 'https://ssbtrcmpyflqnhwxrkla.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzYnRyY21weWZscW5od3hya2xhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwODUwODgsImV4cCI6MjA4MTY2MTA4OH0.is4JVdtcGwwF0ngrpMV2xPfLHffdP5JUJLyimxzyDMM';
+
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.getElementById('waitlist-form');
+    const emailInput = document.getElementById('email-input');
+    const errorText = document.getElementById('error-text');
+    const submitBtn = document.getElementById('submit-btn');
+    const successState = document.getElementById('success-state');
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    }
+
+    function showError(msg) {
+      errorText.textContent = msg;
+      errorText.classList.add('visible');
+      emailInput.classList.add('error');
+    }
+
+    function clearError() {
+      errorText.classList.remove('visible');
+      emailInput.classList.remove('error');
+    }
+
+    emailInput.addEventListener('input', clearError);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearError();
+
+      const email = emailInput.value.trim();
+
+      if (!isValidEmail(email)) {
+        showError('Please enter a valid email.');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Joining…';
+
+      try {
+        const { error } = await db
+          .from('waitlist')
+          .insert([{ email, created_at: new Date().toISOString() }]);
+        if (error) console.error('Supabase error:', error);
+      } catch (err) {
+        console.error('Unexpected error:', err);
+      }
+
+      form.style.display = 'none';
+      successState.classList.add('visible');
+    });
+  </script>
+</body>
+</html>
