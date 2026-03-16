@@ -71,7 +71,23 @@
       gap: 8px;
     }
 
-    input[type="email"] {
+    .name-age-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .name-age-row input {
+      flex: 1;
+    }
+
+    .name-age-row input[name="age"] {
+      flex: 0 0 80px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    select {
       width: 100%;
       padding: 16px;
       font-family: inherit;
@@ -83,18 +99,46 @@
       border-radius: 12px;
       outline: none;
       transition: border-color 0.15s ease;
+      appearance: none;
+      -webkit-appearance: none;
     }
 
+    input[type="text"]::placeholder,
+    input[type="number"]::placeholder,
     input[type="email"]::placeholder {
       color: #C4A8D4;
     }
 
-    input[type="email"]:focus {
+    select {
+      color: #C4A8D4;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C4A8D4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    select.has-value {
+      color: #1A1A1A;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="email"]:focus,
+    select:focus {
       border-color: #9B7BB0;
     }
 
-    input[type="email"].error {
+    input[type="text"].error,
+    input[type="number"].error,
+    input[type="email"].error,
+    select.error {
       border-color: #D96060;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
     }
 
     .error-text {
@@ -186,6 +230,31 @@
 
     <div class="form-wrapper">
       <form class="input-group" id="waitlist-form" novalidate>
+        <div class="name-age-row">
+          <input
+            type="text"
+            name="name"
+            id="name-input"
+            placeholder="your name"
+            autocomplete="given-name"
+          />
+          <input
+            type="number"
+            name="age"
+            id="age-input"
+            placeholder="age"
+            min="13"
+            max="120"
+            inputmode="numeric"
+          />
+        </div>
+        <select name="gender" id="gender-input">
+          <option value="" disabled selected>gender</option>
+          <option value="woman">Woman</option>
+          <option value="man">Man</option>
+          <option value="non-binary">Non-binary</option>
+          <option value="prefer-not-to-say">Prefer not to say</option>
+        </select>
         <input
           type="email"
           id="email-input"
@@ -193,7 +262,7 @@
           autocomplete="email"
           inputmode="email"
         />
-        <span class="error-text" id="error-text">Please enter a valid email.</span>
+        <span class="error-text" id="error-text"></span>
         <button type="submit" id="submit-btn">Join the waitlist</button>
       </form>
 
@@ -216,38 +285,49 @@
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const form = document.getElementById('waitlist-form');
+    const nameInput = document.getElementById('name-input');
+    const ageInput = document.getElementById('age-input');
+    const genderInput = document.getElementById('gender-input');
     const emailInput = document.getElementById('email-input');
     const errorText = document.getElementById('error-text');
     const submitBtn = document.getElementById('submit-btn');
     const successState = document.getElementById('success-state');
 
+    genderInput.addEventListener('change', () => {
+      genderInput.classList.toggle('has-value', genderInput.value !== '');
+      clearError();
+    });
+
+    [nameInput, ageInput, emailInput].forEach(el => el.addEventListener('input', clearError));
+
     function isValidEmail(email) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
     }
 
-    function showError(msg) {
+    function showError(msg, field) {
       errorText.textContent = msg;
       errorText.classList.add('visible');
-      emailInput.classList.add('error');
+      if (field) field.classList.add('error');
     }
 
     function clearError() {
       errorText.classList.remove('visible');
-      emailInput.classList.remove('error');
+      [nameInput, ageInput, genderInput, emailInput].forEach(el => el.classList.remove('error'));
     }
-
-    emailInput.addEventListener('input', clearError);
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       clearError();
 
+      const name = nameInput.value.trim();
+      const age = ageInput.value.trim();
+      const gender = genderInput.value;
       const email = emailInput.value.trim();
 
-      if (!isValidEmail(email)) {
-        showError('Please enter a valid email.');
-        return;
-      }
+      if (!name) { showError('Please enter your name.', nameInput); return; }
+      if (!age || isNaN(age) || +age < 13 || +age > 120) { showError('Please enter a valid age.', ageInput); return; }
+      if (!gender) { showError('Please select your gender.', genderInput); return; }
+      if (!isValidEmail(email)) { showError('Please enter a valid email.', emailInput); return; }
 
       submitBtn.disabled = true;
       submitBtn.textContent = 'Joining…';
@@ -255,7 +335,7 @@
       try {
         const { error } = await db
           .from('waitlist')
-          .insert([{ email, created_at: new Date().toISOString() }]);
+          .insert([{ name, age: +age, gender, email, created_at: new Date().toISOString() }]);
         if (error) console.error('Supabase error:', error);
       } catch (err) {
         console.error('Unexpected error:', err);
