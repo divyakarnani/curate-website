@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Curate | The Beauty App That Actually Knows You",
   description:
     "Objective scores, AI personalization, trusted friend ratings, and price comparison, all in one place. Join the waitlist for early access.",
+  verification: {
+    google: "UMbiraratzzk15JWZtvH16fzN44vRYVnMe3XtkXbExo",
+  },
 };
 
 export default function RootLayout({
