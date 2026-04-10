@@ -19,6 +19,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <meta name="google-site-verification" content="UMbiraratzzk15JWZtvH16fzN44vRYVnMe3XtkXbExo" />
+      </head>
       <body className="bg-white text-ink font-sans antialiased">
         <Nav />
         <main>{children}</main>
