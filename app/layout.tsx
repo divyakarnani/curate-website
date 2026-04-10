@@ -1,0 +1,26 @@
+import type { Metadata } from "next";
+import "./globals.css";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "Curate | The Beauty App That Actually Knows You",
+  description:
+    "Objective scores, AI personalization, trusted friend ratings, and price comparison, all in one place. Join the waitlist for early access.",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" className="scroll-smooth">
+      <body className="bg-white text-ink font-sans antialiased">
+        <Nav />
+        <main>{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
+}
