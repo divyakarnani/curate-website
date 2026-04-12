@@ -23,7 +23,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="mailto:curatebeauty.dev@gmail.com"
+              href="mailto:curatebeauty.ai@gmail.com"
               className="text-gray-500 hover:text-ink transition-colors inline-flex"
               aria-label="Email"
             >
