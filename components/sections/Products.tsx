@@ -88,8 +88,8 @@ export default async function Products() {
             </em>
           </h2>
           <p className="text-[15px] text-gray-700 leading-[1.65] mt-6 max-w-[480px]">
-            Real products from our database, ranked by objective score.
-            Swipe to explore. Scores are computed live. No curation, no sponsorship.
+            Real products from our database, ranked by overall score.
+            Swipe to explore. Scores are computed live.
           </p>
         </div>
 

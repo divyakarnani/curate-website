@@ -47,7 +47,7 @@ const features = [
     num: "03",
     label: "PRICE",
     title: "Best Price Finder",
-    body: "Like Kayak, but for beauty. Compare prices across Sephora, Amazon, and more without leaving Curate.",
+    body: "Find the best price on products you love — click through and we'll take you straight to the product page, no searching required.",
     accent: (
       <Icon>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9B7BB0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -76,8 +76,8 @@ const features = [
   {
     num: "05",
     label: "LISTS",
-    title: "Want to Try Lists",
-    body: "Save and rank products you're considering. When a friend rates something on your list, you'll hear about it first.",
+    title: "Lists",
+    body: "Rank products you've already tried, save ones you want to, and create your own lists — think fall favorites or birthday gift ideas. Curate organizes everything by category, so what you need is always easy to find.",
     accent: (
       <Icon>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9B7BB0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

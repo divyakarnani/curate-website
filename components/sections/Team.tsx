@@ -4,8 +4,8 @@ import SectionLabel from "@/components/SectionLabel";
 import { AnimatedContainer, AnimatedItem } from "@/components/AnimatedSection";
 
 const members = [
-  { name: "Valentina Kafati", role: "Co-Founder, Finance & Operations", initial: "V" },
-  { name: "Gabriela de Oliveira", role: "Co-Founder, Growth & Strategy", initial: "G" },
+  { name: "Valentina Kafati", role: "Co-Founder", initial: "V" },
+  { name: "Gabriela de Oliveira", role: "Co-Founder", initial: "G" },
   { name: "Divya Karnani", role: "Technical Lead, AI & Engineering", initial: "D" },
 ];
 

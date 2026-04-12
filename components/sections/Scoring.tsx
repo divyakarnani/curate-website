@@ -7,7 +7,7 @@ import { AnimatedContainer, AnimatedItem } from "@/components/AnimatedSection";
 const scores = [
   {
     score: 7.7,
-    title: "Objective Score",
+    title: "Overall Score",
     body: "Based on formulation quality, value for price, and sustainability. No bias, no ads.",
   },
   {
